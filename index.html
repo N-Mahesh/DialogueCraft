@@ -1,0 +1,1694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DialogueCraft - Master Every Conversation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Primary Brand Colors - Industrial Craft Theme */
+      --steel-blue: #2D4059;
+      --copper-accent: #D4751A;
+      --charcoal: #1A1A2E;
+      --slate-gray: #16213E;
+      --warm-white: #F8F9FA;
+      
+      /* Secondary Accent Colors */
+      --amber-glow: #F39C12;
+      --forest-green: #27AE60;
+      --crimson: #E74C3C;
+      --lavender: #8E44AD;
+      
+      /* Neutral Palette */
+      --light-gray: #ECF0F1;
+      --medium-gray: #7F8C8D;
+      --text-primary: #2C3E50;
+      --text-secondary: #5D6D7E;
+      
+      /* UI Mapping */
+      --bg-color: var(--warm-white);
+      --text-color: var(--text-primary);
+      --primary-color: var(--steel-blue);
+      --primary-hover: var(--slate-gray);
+      --secondary-bg: var(--light-gray);
+      --border-color: var(--medium-gray);
+      --shadow-color: rgba(45, 64, 89, 0.15);
+      --accent-color: var(--copper-accent);
+      --radius: 8px;
+      --inner-radius: 4px;
+    }
+    
+    .dark-mode {
+      --bg-color: var(--charcoal);
+      --text-color: #E8E8E8;
+      --primary-color: var(--steel-blue);
+      --primary-hover: var(--copper-accent);
+      --secondary-bg: var(--slate-gray);
+      --border-color: #3A3A5C;
+      --shadow-color: rgba(0, 0, 0, 0.5);
+      --accent-color: var(--amber-glow);
+      --text-primary: #E8E8E8;
+      --text-secondary: #B8B8B8;
+    }
+    
+    .dark-mode .logo {
+      filter: invert(1);
+    }
+    
+    .dark-mode .craft-card {
+      background-color: var(--secondary-bg);
+      border-color: var(--border-color);
+    }
+    
+    .dark-mode button {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+    
+    .dark-mode button:hover {
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+    }
+    
+    .dark-mode textarea {
+      background-color: var(--secondary-bg);
+      border-color: var(--border-color);
+    }
+    
+    .dark-mode select {
+      background-color: var(--secondary-bg);
+      border-color: var(--border-color);
+    }
+    
+    .dark-mode .dialog-content {
+      background-color: var(--secondary-bg);
+      border: 1px solid var(--border-color);
+    }
+    
+    .dark-mode .preset-item {
+      background-color: var(--bg-color);
+      border-color: var(--border-color);
+    }
+    
+    .dark-mode .history-item {
+      background-color: var(--bg-color);
+      border-color: var(--border-color);
+    }
+    
+    body { 
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
+      max-width: 1200px; 
+      margin: 24px auto; 
+      line-height: 1.6; 
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      transition: all 0.3s ease;
+      padding: 0 24px;
+      font-size: 16px;
+    }
+    
+    .main-container {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 32px;
+    }
+    
+    .primary-panel {
+      grid-column: 1;
+    }
+    
+    .sidebar-panel {
+      grid-column: 2;
+      position: sticky;
+      top: 24px;
+      height: fit-content;
+    }
+    
+    .logo-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    .logo {
+      max-width: 280px;
+      height: auto;
+    }
+    
+    .header-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .controls {
+      display: flex;
+      gap: 10px;
+    }
+    
+    button { 
+      padding: 12px 24px; 
+      background: linear-gradient(135deg, var(--steel-blue), var(--slate-gray));
+      color: white; 
+      border: none; 
+      border-radius: var(--inner-radius); 
+      cursor: pointer; 
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      transition: all 0.2s ease;
+      font-size: 14px;
+      box-shadow: 0 2px 8px var(--shadow-color);
+    }
+    
+    button:hover { 
+      background: linear-gradient(135deg, var(--primary-hover), var(--charcoal));
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(45, 64, 89, 0.3);
+    }
+    
+    .controls button {
+      padding: 8px 12px;
+      font-size: 1.1rem;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    pre { 
+      background: var(--secondary-bg); 
+      padding: 15px; 
+      border-radius: var(--inner-radius); 
+      white-space: pre-wrap; 
+      margin-top: 15px;
+      border: 1px solid var(--border-color);
+      transition: background-color 0.3s;
+      font-size: 14px;
+      line-height: 1.6;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    
+    h1, h2, h3 {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      color: var(--primary-color);
+    }
+    
+    .craft-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, var(--steel-blue), var(--copper-accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    /* Dialog styles */
+    .dialog {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    
+    .dialog-content {
+      background-color: var(--bg-color);
+      padding: 20px;
+      border-radius: 5px;
+      width: 80%;
+      max-width: 400px;
+      box-shadow: 0 2px 10px var(--shadow-color);
+    }
+    
+    .dialog input {
+      width: 100%;
+      padding: 10px 12px;
+      margin: 8px 0 16px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--inner-radius);
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-size: 14px;
+      transition: border-color 0.2s;
+    }
+    
+    .dialog input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(14, 162, 127, 0.2);
+    }
+    
+    .api-key-section {
+      margin-bottom: 8px;
+    }
+    
+    .api-key-section label {
+      display: block;
+      margin-bottom: 4px;
+      font-weight: 500;
+      font-size: 14px;
+    }
+    
+    .dialog-buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    
+    .info-text {
+      font-size: 14px;
+      opacity: 0.8;
+    }
+    
+    
+    #api-key-status {
+      margin-top: 10px;
+      font-size: 14px;
+      min-height: 20px;
+    }
+    
+    .hidden {
+      display: none;
+    }
+    
+    @keyframes pulse {
+      0% { opacity: 0.6; }
+      50% { opacity: 1; }
+      100% { opacity: 0.6; }
+    }
+    
+    .pulsing {
+      animation: pulse 1.5s infinite;
+    }
+    
+    /* App description */
+    .app-description {
+      margin: -5px 0 20px;
+      font-size: 15px;
+      color: var(--text-color);
+      opacity: 0.8;
+    }
+
+    /* Model selector styles */
+    .options-row {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 18px;
+      background: var(--secondary-bg);
+      padding: 14px 18px;
+      border-radius: var(--radius);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    
+    .recording-controls {
+      display: flex;
+      align-items: center;
+    }
+    
+    .record-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      padding: 16px 32px;
+      background: var(--copper-accent);
+      transition: all 0.3s ease;
+      border-radius: var(--radius);
+      box-shadow: 0 4px 12px rgba(212, 117, 26, 0.25);
+      font-size: 16px;
+    }
+    
+    .record-btn:hover {
+      transform: translateY(-2px);
+      background-color: var(--amber-glow);
+      box-shadow: 0 6px 16px rgba(243, 156, 18, 0.35);
+    }
+    
+    .record-btn.active {
+      background-color: var(--crimson);
+      box-shadow: 0 4px 12px rgba(231, 76, 60, 0.25);
+      animation: pulse-record 2s infinite;
+    }
+    
+    @keyframes pulse-record {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.8; }
+    }
+    
+    .record-btn.active:hover {
+      box-shadow: 0 6px 16px rgba(231, 76, 60, 0.35);
+    }
+    
+    #end-transcription {
+      background-color: var(--smart-blue);
+      box-shadow: 0 4px 12px rgba(53, 54, 223, 0.25);
+      margin-left: 8px;
+    }
+    
+    #end-transcription:hover {
+      background-color: var(--creative-purple);
+      box-shadow: 0 6px 16px rgba(65, 41, 125, 0.35);
+    }
+    
+    .model-selector {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    select {
+      padding: 8px 12px;
+      border-radius: var(--inner-radius);
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: 'Prompt', sans-serif;
+      font-size: 14px;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%230EA27F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      padding-right: 32px;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    
+    .dark-mode select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23E8E8E8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    }
+    
+    select:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(14, 162, 127, 0.2);
+    }
+    
+    .craft-card {
+      margin: 24px 0;
+      border-radius: var(--inner-radius);
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-color);
+      padding: 24px;
+      box-shadow: 0 1px 3px var(--shadow-color);
+      transition: all 0.3s ease;
+      animation: craft-slide-in 0.3s ease-out;
+    }
+    
+    @keyframes craft-slide-in {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .craft-card:hover {
+      box-shadow: 0 4px 12px var(--shadow-color);
+      transform: translateY(-2px);
+    }
+    
+    .craft-card--transcription {
+      border-left: 4px solid var(--steel-blue);
+    }
+    
+    .craft-card--response {
+      border-left: 4px solid var(--forest-green);
+    }
+    
+    .response-container {
+      margin: 18px 0;
+    }
+    
+    .response-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .response-header .box-label {
+      margin-bottom: 0;
+    }
+    
+    .box-label {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--primary-color);
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    /* System prompt styles */
+    .craft-card--prompt {
+      border-left: 4px solid var(--lavender);
+    }
+    
+    .system-prompt-container:hover {
+      box-shadow: 0 4px 12px var(--shadow-color);
+    }
+    
+    .prompt-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .prompt-header label {
+      font-weight: bold;
+    }
+    
+    .preset-controls {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    
+    .preset-controls button {
+      padding: 6px 10px;
+      font-size: 0.9rem;
+    }
+    
+    #save-as-preset {
+      font-size: 0.85rem;
+    }
+    
+    #manage-presets {
+      padding: 4px 8px;
+      font-size: 1rem;
+    }
+    
+    textarea {
+      width: calc(100% - 32px);
+      padding: 12px 16px;
+      border-radius: var(--inner-radius);
+      border: 2px solid var(--border-color);
+      margin-bottom: 10px;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: 'Inter', sans-serif;
+      resize: vertical;
+      font-size: 14px;
+      transition: border-color 0.2s ease;
+      box-shadow: 0 1px 3px var(--shadow-color) inset;
+      line-height: 1.5;
+    }
+    
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(45, 64, 89, 0.1);
+    }
+    
+    /* Preset management styles */
+    .preset-list {
+      margin: 15px 0;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    
+    .preset-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      background-color: var(--bg-color);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+    
+    .preset-name {
+      font-weight: bold;
+    }
+    
+    .preset-actions {
+      display: flex;
+      gap: 5px;
+    }
+    
+    .preset-actions button {
+      padding: 4px 8px;
+      font-size: 0.8rem;
+    }
+    
+    /* History list styles */
+    .history-container {
+      margin-top: 30px;
+    }
+    
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .clear-btn {
+      padding: 6px 12px;
+      font-size: 0.85rem;
+      background-color: var(--rebel-orange);
+    }
+    
+    .clear-btn:hover {
+      background-color: #e63e39;
+    }
+    
+    .history-list {
+      margin-top: 10px;
+    }
+    
+    .history-item {
+      padding: 15px;
+      background-color: var(--secondary-bg);
+      border-radius: 5px;
+      border: 1px solid var(--border-color);
+      margin-bottom: 10px;
+    }
+    
+    .history-item-objection {
+      font-size: 0.85rem;
+      opacity: 0.8;
+      margin-bottom: 8px;
+    }
+    
+    .history-item-response {
+      font-weight: bold;
+    }
+    
+    .history-item-meta {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+      font-size: 0.8rem;
+      color: var(--text-color);
+      opacity: 0.7;
+    }
+    
+    .brand-header {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    
+    .brand-tagline {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      margin: 0;
+      font-weight: 400;
+    }
+    
+    .header-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 24px;
+    }
+    
+    .sidebar-panel {
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+    
+    .dark-mode .sidebar-panel {
+      background: rgba(22, 33, 62, 0.8);
+    }
+    
+    .footer {
+      margin-top: 40px;
+      padding: 15px 0;
+      text-align: center;
+      border-top: 1px solid var(--border-color);
+      grid-column: 1 / -1;
+    }
+    
+    .footer a {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+    
+    .footer a:hover {
+      color: var(--primary-hover);
+      text-decoration: underline;
+    }
+    
+    @media (max-width: 768px) {
+      .main-container {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      
+      .sidebar-panel {
+        order: -1;
+        position: static;
+      }
+      
+      .craft-title {
+        font-size: 2rem;
+      }
+      
+      .header-section {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="main-container">
+    <div class="primary-panel">
+      <div class="header-section">
+        <div class="brand-header">
+          <h1 class="craft-title">DialogueCraft</h1>
+          <p class="brand-tagline">Master Every Conversation</p>
+        </div>
+        <div class="controls">
+          <button id="theme-toggle" title="Toggle dark mode">🌓</button>
+          <button id="settings-btn" title="Settings">⚙️</button>
+        </div>
+      </div>
+      <div class="app-description">
+        <p>Advanced conversation intelligence with real-time AI coaching and response generation</p>
+      </div>
+
+  <div class="options-row">
+    <div class="recording-controls">
+      <button id="toggle" class="record-btn">
+        <span id="status-dot"></span>🎤 Start Listening
+      </button>
+      <div id="visualizer-container" style="margin-left: 10px; width: 120px; height: 30px; display: none; align-items: center; justify-content: center;"></div>
+    </div>
+  </div>
+
+      <div class="craft-card craft-card--transcription">
+        <p class="box-label">🎙️ Voice Input Analysis:</p>
+        <pre id="lastObjection">Your conversation input will appear here...</pre>
+      </div>
+
+      <div class="craft-card craft-card--prompt">
+        <div class="prompt-header">
+          <label for="system-prompt">Conversation Strategy:</label>
+          <div class="preset-controls">
+            <select id="preset-select">
+              <option value="">-- Choose Strategy --</option>
+              <option value="executive-reframer">Executive Reframer</option>
+              <option value="negotiation">Negotiation Expert</option>
+            </select>
+            <button id="save-as-preset" title="Save as new preset">Save As+</button>
+            <button id="manage-presets" title="Manage presets">⋮</button>
+          </div>
+        </div>
+        <textarea id="system-prompt" rows="3">You are an advanced conversation strategist specializing in transforming challenging interactions into opportunities. Generate sophisticated, contextually-aware responses that demonstrate deep understanding while guiding conversations toward positive outcomes. Your expertise spans executive communication, relationship building, and strategic dialogue management.</textarea>
+        <button id="save-prompt">Update Strategy</button>
+      </div>
+
+      <div class="response-container">
+        <div class="response-header">
+          <p class="box-label">🎯 Strategic Response:</p>
+          <div class="model-selector">
+            <label for="model-select">AI Engine:</label>
+            <select id="model-select">
+              <option value="chatgpt-4o-latest" selected>DialogueGPT-4o (Advanced)</option>
+              <option value="gpt-4o-mini-2024-07-18">DialogueGPT-4o (Rapid)</option>
+              <option value="gpt-4.1-2025-04-14">ConversationAI 4.1</option>
+              <option value="gpt-4.1-mini-2025-04-14">ConversationAI 4.1 (Efficient)</option>
+              <option value="gpt-4.1-nano-2025-04-14">ConversationAI 4.1 (Quick)</option>
+            </select>
+          </div>
+        </div>
+        <div class="craft-card craft-card--response">
+          <pre id="reply">AI-generated strategic responses will appear here...</pre>
+        </div>
+      </div>
+    </div>
+    
+    <div class="sidebar-panel">
+      <div class="craft-card">
+        <h3>Conversation History</h3>
+        <div id="history-list" class="history-list"></div>
+        <button id="clear-history" class="clear-btn" title="Clear all history">Clear History</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Preset Management Dialog -->
+  <div id="preset-dialog" class="dialog hidden">
+    <div class="dialog-content">
+      <h3>Manage Prompt Presets</h3>
+      <div id="preset-list" class="preset-list">
+        <!-- Presets will be loaded here -->
+      </div>
+      <div class="dialog-buttons">
+        <button id="preset-dialog-close">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- New Preset Dialog -->
+  <div id="new-preset-dialog" class="dialog hidden">
+    <div class="dialog-content">
+      <h3>Save as New Preset</h3>
+      <label for="new-preset-name">Preset Name:</label>
+      <input type="text" id="new-preset-name" placeholder="Enter a name for this preset">
+      <div class="dialog-buttons">
+        <button id="new-preset-cancel">Cancel</button>
+        <button id="new-preset-save">Save</button>
+      </div>
+      <p id="new-preset-status"></p>
+    </div>
+  </div>
+
+
+  <!-- API Key Dialog -->
+  <div id="api-key-dialog" class="dialog hidden">
+    <div class="dialog-content">
+      <h3>API Key</h3>
+      <p class="info-text">Your API key is stored locally in your browser.</p>
+      
+      <div class="api-key-section">
+        <label for="openai-api-key-input">OpenAI API Key:</label>
+        <input type="password" id="openai-api-key-input" placeholder="sk-..." />
+      </div>
+      
+      <div class="dialog-buttons">
+        <button id="api-key-save">Save</button>
+        <button id="api-key-cancel">Cancel</button>
+      </div>
+      <p id="api-key-status"></p>
+    </div>
+  </div>
+
+  <script>
+  // Initialize Speech Recognition
+  const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const r = new Speech();
+  r.continuous = true;
+  r.interimResults = false;
+  let on = false;
+  let lastTranscript = '';
+
+  // Initialize DialogueCraft application state
+  const conversationState = {
+    dialogueHistory: [],
+    activeStrategy: 'You are an advanced conversation strategist specializing in transforming challenging interactions into opportunities. Generate sophisticated, contextually-aware responses that demonstrate deep understanding while guiding conversations toward positive outcomes. Your expertise spans executive communication, relationship building, and strategic dialogue management.',
+    selectedEngine: 'chatgpt-4o-latest',
+    conversationMetrics: {
+      totalInteractions: 0,
+      successfulResponses: 0,
+      averageResponseTime: 0,
+      conversationSentiment: 'neutral'
+    },
+    contextMemory: [],
+    strategicPresets: {
+      'executive-reframer': {
+        name: 'Executive Reframer',
+        prompt: 'You are an advanced executive communication strategist with expertise in transforming challenges into strategic opportunities. Generate sophisticated, contextually-aware responses that demonstrate executive presence while building collaborative partnerships. Your responses should reflect deep business acumen and emotional intelligence.'
+      },
+      'negotiation': {
+        name: 'Negotiation Expert',
+        prompt: 'You are a master negotiation strategist with expertise in high-stakes business conversations. Create tactical responses that redirect objections while building mutual value. Focus on psychological principles, strategic framing, and collaborative problem-solving to achieve win-win outcomes.'
+      }
+    }
+  };
+
+  // Initialize DialogueCraft core systems
+  let voiceProcessor = null;
+  let conversationAnalyzer = null;
+  let responseQualityTracker = null;
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Initialize advanced voice processing system
+    if (typeof AudioProcessor === 'function') {
+      try {
+        voiceProcessor = new AudioProcessor();
+        conversationAnalyzer = new ConversationAnalyzer();
+        responseQualityTracker = new ResponseQualityTracker();
+        console.log('DialogueCraft systems initialized successfully');
+      } catch (e) {
+        console.error('Error initializing DialogueCraft systems:', e);
+      }
+    }
+    
+    // Initialize UI state manager with error handling
+    try {
+      window.uiStateManager = new UIStateManager();
+      console.log('UIStateManager initialized successfully');
+    } catch (e) {
+      console.error('Error initializing UIStateManager:', e);
+    }
+    
+    // Load saved state
+    loadSavedState();
+    
+    // No API key checks needed up front
+    
+    // Setup dark mode
+    const savedTheme = localStorage.getItem('theme_mode');
+    if (savedTheme === 'dark') {
+      document.body.classList.add('dark-mode');
+      
+      // Set the toggle icon text
+      const themeToggle = document.getElementById('theme-toggle');
+      if (themeToggle) {
+        themeToggle.textContent = '🌓';
+      }
+    }
+    
+    // Set up event listeners with error handling
+    const setupEventListeners = () => {
+      try {
+        // Theme toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        if (themeToggle) {
+          themeToggle.addEventListener('click', toggleTheme);
+          console.log("Theme toggle button listener added");
+        }
+        
+        // Settings button
+        const settingsBtn = document.getElementById('settings-btn');
+        if (settingsBtn) {
+          settingsBtn.addEventListener('click', showApiKeyDialog);
+          console.log("Settings button listener added");
+        }
+        
+        // API key dialog buttons
+        const apiKeySave = document.getElementById('api-key-save');
+        if (apiKeySave) {
+          apiKeySave.addEventListener('click', saveApiKey);
+        }
+        
+        const apiKeyCancel = document.getElementById('api-key-cancel');
+        if (apiKeyCancel) {
+          apiKeyCancel.addEventListener('click', hideApiKeyDialog);
+        }
+        
+        // Recording toggle
+        const toggleBtn = document.getElementById('toggle');
+        if (toggleBtn) {
+          toggleBtn.addEventListener('click', toggleRecording);
+          console.log("Toggle recording button listener added");
+        }
+        
+        // Save strategy button
+        const saveStrategyBtn = document.getElementById('save-prompt');
+        if (saveStrategyBtn) {
+          saveStrategyBtn.addEventListener('click', saveConversationStrategy);
+        }
+        
+        // AI Engine select
+        const engineSelect = document.getElementById('model-select');
+        if (engineSelect) {
+          engineSelect.addEventListener('change', updateSelectedEngine);
+        }
+      } catch (error) {
+        console.error("Error setting up event listeners:", error);
+      }
+    };
+    
+    // Set up event listeners immediately and also with a small delay to ensure DOM is ready
+    setupEventListeners();
+    setTimeout(setupEventListeners, 500);
+    
+    // Preset management listeners
+    try {
+      const strategySelect = document.getElementById('preset-select');
+      if (strategySelect) {
+        strategySelect.addEventListener('change', loadSelectedStrategy);
+      }
+      
+      const saveAsPreset = document.getElementById('save-as-preset');
+      if (saveAsPreset) {
+        saveAsPreset.addEventListener('click', showNewPresetDialog);
+      }
+      
+      const manageStrategies = document.getElementById('manage-presets');
+      if (manageStrategies) {
+        manageStrategies.addEventListener('click', showStrategyManagerDialog);
+      }
+      
+      const strategyDialogClose = document.getElementById('preset-dialog-close');
+      if (strategyDialogClose) {
+        strategyDialogClose.addEventListener('click', hideStrategyManagerDialog);
+      }
+      
+      const newPresetCancel = document.getElementById('new-preset-cancel');
+      if (newPresetCancel) {
+        newPresetCancel.addEventListener('click', hideNewPresetDialog);
+      }
+      
+      const newPresetSave = document.getElementById('new-preset-save');
+      if (newPresetSave) {
+        newPresetSave.addEventListener('click', saveNewPreset);
+      }
+      
+      // History management
+      const clearHistory = document.getElementById('clear-history');
+      if (clearHistory) {
+        clearHistory.addEventListener('click', clearConversationHistory);
+      }
+    } catch (error) {
+      console.error("Error setting up preset/history listeners:", error);
+    }
+    
+    // Close dialogs with Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        try {
+          const apiKeyDialog = document.getElementById('api-key-dialog');
+          const presetDialog = document.getElementById('preset-dialog');
+          const newPresetDialog = document.getElementById('new-preset-dialog');
+          
+          if (apiKeyDialog && !apiKeyDialog.classList.contains('hidden')) {
+            hideApiKeyDialog();
+          } else if (presetDialog && !presetDialog.classList.contains('hidden')) {
+            hidePresetManagerDialog();
+          } else if (newPresetDialog && !newPresetDialog.classList.contains('hidden')) {
+            hideNewPresetDialog();
+          }
+        } catch (error) {
+          console.error("Error handling Escape key:", error);
+        }
+      }
+    });
+    
+    // Render initial UI
+    renderConversationHistory();
+    renderStrategyList();
+  });
+
+  // Load DialogueCraft application state from localStorage
+  function loadSavedState() {
+    // Load conversation strategy
+    const savedStrategy = localStorage.getItem('active_strategy');
+    if (savedStrategy) {
+      conversationState.activeStrategy = savedStrategy;
+      document.getElementById('system-prompt').value = savedStrategy;
+    }
+    
+    // Load selected AI engine
+    const savedEngine = localStorage.getItem('selected_engine');
+    if (savedEngine) {
+      conversationState.selectedEngine = savedEngine;
+      document.getElementById('model-select').value = savedEngine;
+    }
+    
+    // Load API keys
+    const openaiKey = localStorage.getItem('openai_api_key') || '';
+    const claudeKey = localStorage.getItem('claude_api_key') || '';
+    
+    // Load conversation history with enhanced metadata
+    const savedHistory = localStorage.getItem('dialogue_history');
+    if (savedHistory) {
+      try {
+        conversationState.dialogueHistory = JSON.parse(savedHistory);
+        // Update conversation metrics
+        conversationState.conversationMetrics.totalInteractions = conversationState.dialogueHistory.length;
+      } catch (e) {
+        console.error('Error parsing saved dialogue history:', e);
+        conversationState.dialogueHistory = [];
+      }
+    }
+    
+    // Load strategic conversation presets
+    const savedPresets = localStorage.getItem('strategic_presets');
+    if (savedPresets) {
+      try {
+        const customPresets = JSON.parse(savedPresets);
+        // Merge custom presets with default strategic presets
+        conversationState.strategicPresets = { ...conversationState.strategicPresets, ...customPresets };
+        // Update the strategy dropdown options
+        setTimeout(updateStrategyOptions, 0);
+      } catch (e) {
+        console.error('Error parsing saved strategic presets:', e);
+      }
+    } else {
+      // Initialize with default strategic presets
+      setTimeout(updateStrategyOptions, 0);
+    }
+  }
+
+  // Preset management functions
+  function renderStrategyList() {
+    const strategyList = document.getElementById('preset-list');
+    strategyList.innerHTML = '';
+    
+    // Create strategic preset items
+    Object.entries(conversationState.strategicPresets).forEach(([id, strategy]) => {
+      const presetItem = document.createElement('div');
+      presetItem.className = 'preset-item';
+      
+      const nameSpan = document.createElement('span');
+      nameSpan.className = 'preset-name';
+      nameSpan.textContent = strategy.name;
+      
+      const actions = document.createElement('div');
+      actions.className = 'preset-actions';
+      
+      const loadBtn = document.createElement('button');
+      loadBtn.textContent = 'Activate';
+      loadBtn.addEventListener('click', () => {
+        activateStrategy(id);
+        hideStrategyManagerDialog();
+      });
+      
+      const deleteBtn = document.createElement('button');
+      deleteBtn.textContent = 'Delete';
+      
+      // Don't allow deleting the default presets
+      if (['executive-reframer', 'negotiation'].includes(id)) {
+        deleteBtn.disabled = true;
+        deleteBtn.title = 'Cannot delete default presets';
+      } else {
+        deleteBtn.addEventListener('click', () => deleteStrategy(id));
+      }
+      
+      actions.appendChild(loadBtn);
+      actions.appendChild(deleteBtn);
+      
+      presetItem.appendChild(nameSpan);
+      presetItem.appendChild(actions);
+      
+      presetList.appendChild(presetItem);
+    });
+  }
+
+  // Activate a strategic conversation preset by ID
+  function activateStrategy(strategyId) {
+    const strategy = conversationState.strategicPresets[strategyId];
+    if (strategy) {
+      document.getElementById('system-prompt').value = strategy.prompt;
+      conversationState.activeStrategy = strategy.prompt;
+      localStorage.setItem('active_strategy', strategy.prompt);
+      
+      // Update the strategy dropdown selection
+      document.getElementById('preset-select').value = strategyId;
+      
+      // Log strategy activation for analytics
+      console.log(`Activated conversation strategy: ${strategy.name}`);
+    }
+  }
+
+  // Load selected strategy from dropdown
+  function loadSelectedStrategy(e) {
+    const strategyId = e.target.value;
+    if (strategyId) {
+      activateStrategy(strategyId);
+    }
+  }
+
+  // Delete a strategic conversation preset
+  function deleteStrategy(strategyId) {
+    if (confirm(`Delete the strategy "${conversationState.strategicPresets[strategyId].name}"?`)) {
+      // Remove from state
+      delete conversationState.strategicPresets[strategyId];
+      
+      // Filter out default strategies and save custom ones
+      const customStrategies = {};
+      Object.entries(conversationState.strategicPresets).forEach(([id, strategy]) => {
+        if (!['executive-reframer', 'negotiation'].includes(id)) {
+          customStrategies[id] = strategy;
+        }
+      });
+      
+      // Save custom strategies to localStorage
+      localStorage.setItem('strategic_presets', JSON.stringify(customStrategies));
+      
+      // Update UI
+      renderStrategyList();
+    }
+  }
+
+  // Show strategy manager dialog
+  function showStrategyManagerDialog() {
+    renderStrategyList();
+    document.getElementById('preset-dialog').classList.remove('hidden');
+  }
+
+  // Hide strategy manager dialog
+  function hideStrategyManagerDialog() {
+    document.getElementById('preset-dialog').classList.add('hidden');
+  }
+
+  // Show new preset dialog
+  function showNewPresetDialog() {
+    document.getElementById('new-preset-name').value = '';
+    document.getElementById('new-preset-status').textContent = '';
+    document.getElementById('new-preset-dialog').classList.remove('hidden');
+  }
+
+  // Hide new preset dialog
+  function hideNewPresetDialog() {
+    document.getElementById('new-preset-dialog').classList.add('hidden');
+  }
+
+  // Save a new preset
+  function saveNewPreset() {
+    const nameInput = document.getElementById('new-preset-name');
+    const statusElement = document.getElementById('new-preset-status');
+    const name = nameInput.value.trim();
+    
+    if (!name) {
+      statusElement.textContent = 'Please enter a name for the preset';
+      statusElement.style.color = '#dc3545';
+      return;
+    }
+    
+    // Create a unique ID based on the name
+    const id = 'custom-' + name.toLowerCase().replace(/[^a-z0-9]/g, '-');
+    
+    // Check if ID already exists
+    if (appState.presets[id]) {
+      statusElement.textContent = 'A preset with this name already exists';
+      statusElement.style.color = '#dc3545';
+      return;
+    }
+    
+    // Create the new strategic preset
+    const newStrategy = {
+      name: name,
+      prompt: document.getElementById('system-prompt').value
+    };
+    
+    // Add to state
+    conversationState.strategicPresets[id] = newStrategy;
+    
+    // Filter out default strategies and save custom ones
+    const customStrategies = {};
+    Object.entries(conversationState.strategicPresets).forEach(([strategyId, strategy]) => {
+      if (!['executive-reframer', 'negotiation'].includes(strategyId)) {
+        customStrategies[strategyId] = strategy;
+      }
+    });
+    
+    // Save to localStorage
+    localStorage.setItem('strategic_presets', JSON.stringify(customStrategies));
+    
+    // Update the strategy dropdown options
+    updateStrategyOptions();
+    
+    // Show success message
+    statusElement.textContent = 'Conversation strategy saved successfully';
+    statusElement.style.color = 'var(--forest-green)';
+    
+    // Close dialog after delay
+    setTimeout(hideNewPresetDialog, 1500);
+  }
+
+  // Update strategy dropdown options
+  function updateStrategyOptions() {
+    const select = document.getElementById('preset-select');
+    
+    // Clear existing options except the default one
+    while (select.options.length > 1) {
+      select.remove(1);
+    }
+    
+    // Add all strategic presets as options
+    Object.entries(conversationState.strategicPresets).forEach(([id, strategy]) => {
+      const option = document.createElement('option');
+      option.value = id;
+      option.textContent = strategy.name;
+      select.appendChild(option);
+    });
+  }
+
+  // Save conversation strategy
+  function saveConversationStrategy() {
+    const strategyText = document.getElementById('system-prompt').value.trim();
+    if (strategyText) {
+      conversationState.activeStrategy = strategyText;
+      localStorage.setItem('active_strategy', strategyText);
+      
+      // Show success feedback
+      const saveBtn = document.getElementById('save-prompt');
+      const originalText = saveBtn.textContent;
+      saveBtn.textContent = 'Strategy Updated!';
+      saveBtn.style.backgroundColor = 'var(--forest-green)';
+      
+      setTimeout(() => {
+        saveBtn.textContent = originalText;
+        saveBtn.style.backgroundColor = '';
+      }, 1500);
+      
+      console.log('Conversation strategy updated successfully');
+    }
+  }
+
+  // Update selected AI engine
+  function updateSelectedEngine(e) {
+    conversationState.selectedEngine = e.target.value;
+    localStorage.setItem('selected_engine', conversationState.selectedEngine);
+    console.log(`Switched to AI engine: ${conversationState.selectedEngine}`);
+  }
+
+  // Toggle dark/light theme
+  function toggleTheme() {
+    document.body.classList.toggle('dark-mode');
+    const isDark = document.body.classList.contains('dark-mode');
+    localStorage.setItem('theme_mode', isDark ? 'dark' : 'light');
+    
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+      if (isDark) {
+        themeToggle.textContent = '🌓';
+      } else {
+        themeToggle.textContent = '🌓';
+      }
+    }
+  }
+
+  // API Key dialog functions
+  function showApiKeyDialog() {
+    const dialog = document.getElementById('api-key-dialog');
+    const openaiInput = document.getElementById('openai-api-key-input');
+    
+    const openaiKey = localStorage.getItem('openai_api_key') || '';
+    
+    openaiInput.value = openaiKey;
+    
+    dialog.classList.remove('hidden');
+    setTimeout(() => openaiInput.focus(), 100);
+  }
+
+  function hideApiKeyDialog() {
+    document.getElementById('api-key-dialog').classList.add('hidden');
+  }
+
+  function saveApiKey() {
+    const openaiInput = document.getElementById('openai-api-key-input');
+    const status = document.getElementById('api-key-status');
+    
+    const openaiKey = openaiInput.value.trim();
+    let isValid = true;
+    
+    // Validate OpenAI key if provided
+    if (openaiKey && !openaiKey.startsWith('sk-')) {
+      status.textContent = 'Invalid OpenAI API key format. It should start with "sk-"';
+      status.style.color = '#dc3545';
+      isValid = false;
+    }
+    
+    if (isValid) {
+      if (openaiKey) {
+        localStorage.setItem('openai_api_key', openaiKey);
+      }
+      
+      status.textContent = 'API key saved successfully!';
+      status.style.color = '#28a745';
+      setTimeout(hideApiKeyDialog, 1000);
+    }
+  }
+
+  // Toggle recording function
+  function toggleRecording() {
+    const button = document.getElementById('toggle');
+    
+    if (on) {
+      r.stop();
+      on = false;
+      button.textContent = '🎤 Start Listening';
+      button.classList.remove('active');
+      document.getElementById('lastObjection').textContent = 'Your speech will appear here...';
+      
+      // Update UI state to ready with safe error handling
+      try {
+        if (window.uiStateManager && window.uiStateManager.states && window.uiStateManager.updateState) {
+          window.uiStateManager.updateState(window.uiStateManager.states.READY);
+        }
+      } catch (e) {
+        console.warn('Error updating UI state:', e);
+      }
+      
+      // Stop visualizer when recording stops if available
+      if (audioProcessor && typeof audioProcessor.stopVisualizer === 'function') {
+        try {
+          audioProcessor.stopVisualizer();
+          // Hide the visualizer container
+          const visualizerContainer = document.getElementById('visualizer-container');
+          if (visualizerContainer) {
+            visualizerContainer.style.display = 'none';
+          }
+        } catch (e) {
+          console.error('Error stopping visualizer:', e);
+        }
+      }
+    } else {
+      // Start speech recognition
+      try {
+        r.start();
+        on = true;
+        button.textContent = '🛑 Stop Listening';
+        button.classList.add('active');
+        
+        // Update UI state to listening with safe error handling
+        try {
+          if (window.uiStateManager && window.uiStateManager.states && window.uiStateManager.updateState) {
+            window.uiStateManager.updateState(window.uiStateManager.states.LISTENING);
+          }
+        } catch (e) {
+          console.warn('Error updating UI state:', e);
+        }
+        
+        // Start audio context and visualizer if available
+        if (audioProcessor && typeof audioProcessor.initAudioContext === 'function') {
+          try {
+            // Get audio stream for visualization
+            navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+              .then(stream => {
+                audioProcessor.initAudioContext()
+                  .then(() => {
+                    const visualizerContainer = document.getElementById('visualizer-container');
+                    if (visualizerContainer && typeof audioProcessor.setupVisualizer === 'function') {
+                      // Make the container visible
+                      visualizerContainer.style.display = 'flex';
+                      audioProcessor.setupVisualizer(stream, visualizerContainer);
+                    }
+                  })
+                  .catch(err => console.error('Failed to initialize audio context:', err));
+              })
+              .catch(err => console.error('Error accessing microphone:', err));
+          } catch (e) {
+            console.error('Error with audio processing:', e);
+            // Continue with recording even if visualization fails
+          }
+        }
+      } catch (e) {
+        console.error('Error starting speech recognition:', e);
+        alert('Failed to start speech recognition. Please try again.');
+        
+        // Update UI state to error with safe error handling
+        try {
+          if (window.uiStateManager && window.uiStateManager.states && window.uiStateManager.updateState) {
+            window.uiStateManager.updateState(window.uiStateManager.states.ERROR);
+          }
+        } catch (e) {
+          console.warn('Error updating UI state:', e);
+        }
+      }
+    }
+  }
+
+  // Event handler for speech recognition results
+  r.onresult = async (e) => {
+    const transcript = e.results[e.results.length-1][0].transcript.trim();
+    document.getElementById('lastObjection').textContent = transcript;
+    
+    // If the transcript changed, generate a new response
+    if (transcript !== lastTranscript) {
+      lastTranscript = transcript;
+      await generateResponse(transcript);
+    }
+  };
+
+  // Render the history list
+  function renderHistoryList() {
+    const historyList = document.getElementById('history-list');
+    historyList.innerHTML = '';
+    
+    // Display history items from newest to oldest
+    const sortedHistory = [...appState.responseHistory].reverse();
+    
+    sortedHistory.forEach(entry => {
+      const dialogueItem = document.createElement('div');
+      dialogueItem.className = 'history-item';
+      
+      const userInput = document.createElement('div');
+      userInput.className = 'history-item-objection';
+      userInput.textContent = '🎙️ ' + entry.userInput;
+      
+      const aiResponse = document.createElement('div');
+      aiResponse.className = 'history-item-response';
+      aiResponse.textContent = '🎯 ' + entry.aiResponse;
+      
+      const meta = document.createElement('div');
+      meta.className = 'history-item-meta';
+      
+      const timestamp = document.createElement('span');
+      timestamp.textContent = entry.timestamp;
+      
+      const aiEngine = document.createElement('span');
+      // Friendly display names for AI engines
+      let engineDisplay = entry.aiEngine
+        .replace('chatgpt-4o-latest', 'DialogueGPT-4o')
+        .replace('gpt-4o-mini-2024-07-18', 'DialogueGPT-4o (Rapid)')
+        .replace('gpt-4.1-2025-04-14', 'ConversationAI 4.1');
+      
+      aiEngine.textContent = engineDisplay;
+      
+      // Add sentiment indicator if analysis is available
+      if (entry.analysis && entry.analysis.sentiment) {
+        const sentimentIndicator = document.createElement('span');
+        const sentimentEmoji = {
+          'positive': '😊',
+          'negative': '😔',
+          'neutral': '😐'
+        };
+        sentimentIndicator.textContent = sentimentEmoji[entry.analysis.sentiment] || '😐';
+        sentimentIndicator.title = `Sentiment: ${entry.analysis.sentiment}`;
+        meta.appendChild(sentimentIndicator);
+      }
+      
+      meta.appendChild(timestamp);
+      meta.appendChild(aiEngine);
+      
+      dialogueItem.appendChild(userInput);
+      dialogueItem.appendChild(aiResponse);
+      dialogueItem.appendChild(meta);
+      
+      historyList.appendChild(dialogueItem);
+    });
+  }
+
+  // Add a response to history
+  function addToHistory(objection, response, model) {
+    const now = new Date();
+    const timestamp = now.toLocaleTimeString();
+    
+    // Create history item
+    const historyItem = {
+      objection,
+      response,
+      model,
+      timestamp
+    };
+    
+    // Add to history
+    appState.responseHistory.push(historyItem);
+    
+    // Limit history to 50 items
+    if (appState.responseHistory.length > 50) {
+      appState.responseHistory.shift();
+    }
+    
+    // Save to localStorage
+    localStorage.setItem('response_history', JSON.stringify(appState.responseHistory));
+    
+    // Update UI
+    renderHistoryList();
+  }
+
+  // Clear response history
+  function clearResponseHistory() {
+    if (confirm('Are you sure you want to clear all response history? This cannot be undone.')) {
+      // Clear history in state
+      appState.responseHistory = [];
+      
+      // Clear from localStorage
+      localStorage.removeItem('response_history');
+      
+      // Update UI
+      renderHistoryList();
+      
+      // Show confirmation
+      const clearBtn = document.getElementById('clear-history');
+      const originalText = clearBtn.textContent;
+      clearBtn.textContent = 'Cleared!';
+      
+      setTimeout(() => {
+        clearBtn.textContent = originalText;
+      }, 1500);
+    }
+  }
+
+  // Function to generate a response using OpenAI API
+  async function generateResponse(text) {
+    const replyElement = document.getElementById('reply');
+    
+    // Show loading indicator
+    replyElement.textContent = 'Thinking...';
+    replyElement.classList.add('pulsing');
+    
+    // Update UI state to processing with safe error handling
+    try {
+      if (window.uiStateManager && window.uiStateManager.states && window.uiStateManager.updateState) {
+        window.uiStateManager.updateState(window.uiStateManager.states.PROCESSING);
+      }
+    } catch (e) {
+      console.warn('Error updating UI state:', e);
+    }
+    
+    try {
+      // Get selected model
+      const model = appState.selectedModel;
+      
+      // Get active conversation strategy
+      const conversationStrategy = conversationState.activeStrategy;
+      
+      // Generate strategic response using AI
+      const strategicReply = await generateAIResponse(text, model, conversationStrategy, replyElement);
+      
+      // Add to conversation history with analytics
+      addToConversationHistory(text, strategicReply, model);
+      
+      // Update UI state back to listening if still recording with safe error handling
+      try {
+        if (window.uiStateManager && window.uiStateManager.states && window.uiStateManager.updateState) {
+          if (on) {
+            window.uiStateManager.updateState(window.uiStateManager.states.LISTENING);
+          } else {
+            window.uiStateManager.updateState(window.uiStateManager.states.READY);
+          }
+        }
+      } catch (e) {
+        console.warn('Error updating UI state:', e);
+      }
+      
+    } catch (error) {
+      // Handle errors
+      console.error('Error:', error);
+      replyElement.classList.remove('pulsing');
+      
+      // Update UI state to error with safe error handling
+      try {
+        if (window.uiStateManager && window.uiStateManager.states && window.uiStateManager.updateState) {
+          window.uiStateManager.updateState(window.uiStateManager.states.ERROR);
+        }
+      } catch (e) {
+        console.warn('Error updating UI state:', e);
+      }
+      
+      // Show appropriate error message
+      if (error.message.includes('API key')) {
+        replyElement.textContent = '🔑 API key missing or invalid. Click ⚙️ to set your API key.';
+        setTimeout(showApiKeyDialog, 1000);
+      } else if (error.message.includes('rate') || error.message.includes('limit')) {
+        replyElement.textContent = '⏳ Rate limit exceeded. Please wait a moment and try again.';
+      } else if (error.message.includes('model')) {
+        replyElement.textContent = `⚠️ AI Engine not available. The ${conversationState.selectedEngine} engine might not be accessible.`;
+      } else {
+        replyElement.textContent = '❌ Error: ' + error.message;
+      }
+    }
+  }
+
+  // Function to generate strategic AI response
+  async function generateAIResponse(text, model, conversationStrategy, replyElement) {
+    try {
+      // Get API key
+      const apiKey = localStorage.getItem('openai_api_key');
+      
+      if (!apiKey) {
+        throw new Error('DialogueCraft API authentication missing');
+      }
+      
+      // Make API request
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model: model,
+          messages: [
+            {
+              role: 'system',
+              content: conversationStrategy
+            },
+            {
+              role: 'user',
+              content: `Conversation context: "${text}". Generate a strategic, thoughtful response that demonstrates understanding and guides toward positive outcomes. Be professional, insightful, and conversational.`
+            }
+          ]
+        })
+      });
+      
+      // Handle errors
+      if (!response.ok) {
+        let errorMessage = response.statusText;
+        try {
+          const errorData = await response.json();
+          console.error("OpenAI API error:", errorData);
+          if (errorData.error && errorData.error.message) {
+            errorMessage = errorData.error.message;
+          } else if (errorData.error) {
+            errorMessage = JSON.stringify(errorData.error);
+          } else if (errorData.message) {
+            errorMessage = errorData.message;
+          }
+        } catch (e) {
+          console.error("Failed to parse error response:", e);
+        }
+        throw new Error(errorMessage);
+      }
+      
+      // Process successful response
+      const data = await response.json();
+      console.log("DialogueCraft AI Engine response:", data);
+      
+      // AI Engine response format
+      const strategicReply = data.choices[0]?.message?.content || "No response from DialogueCraft AI Engine";
+      
+      // Remove loading indicator and show strategic reply
+      replyElement.classList.remove('pulsing');
+      replyElement.textContent = strategicReply;
+      
+      // Return the strategic reply to be added to history
+      return strategicReply;
+    } catch (error) {
+      console.error("DialogueCraft AI Engine error:", error);
+      replyElement.classList.remove('pulsing');
+      replyElement.textContent = `❌ DialogueCraft AI Engine Error: ${error.message}`;
+      throw error;
+    }
+  }
+
+  // Handle speech recognition errors and end events
+  r.onerror = e => console.log('Speech error:', e);
+  r.onend = () => {
+    if (on) {
+      // Auto-restart if recording should be on
+      r.start();
+    }
+  };
+  </script>
+
+  <footer class="footer">
+    <p>Powered by DialogueCraft Advanced AI • <a href="https://nikhilmahesh.com/" target="_blank" rel="noopener">Visit nikhilmahesh.com</a></p>
+  </footer>
+
+  <!-- Include utils.js for UIStateManager and other utilities -->
+  <script src="utils.js"></script>
+</body>
+</html>
