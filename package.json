@@ -1,0 +1,24 @@
+{
+  "name": "dialoguecraft-claude",
+  "version": "2.0.0",
+  "description": "Advanced conversation intelligence with Claude AI and subagent architecture",
+  "main": "index.html",
+  "scripts": {
+    "dev": "netlify dev",
+    "build": "echo 'Static build complete'",
+    "deploy": "netlify deploy --prod"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.29.0"
+  },
+  "devDependencies": {},
+  "keywords": [
+    "conversation",
+    "ai",
+    "claude",
+    "speech-recognition",
+    "netlify"
+  ],
+  "author": "Nikhil Mahesh",
+  "license": "MIT"
+}

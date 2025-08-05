@@ -685,7 +685,6 @@
         </div>
         <div class="controls">
           <button id="theme-toggle" title="Toggle dark mode">🌓</button>
-          <button id="settings-btn" title="Settings">⚙️</button>
         </div>
       </div>
       <div class="app-description">
@@ -714,12 +713,13 @@
               <option value="">-- Choose Strategy --</option>
               <option value="executive-reframer">Executive Reframer</option>
               <option value="negotiation">Negotiation Expert</option>
+              <option value="empathetic-coach">Empathetic Coach</option>
             </select>
             <button id="save-as-preset" title="Save as new preset">Save As+</button>
             <button id="manage-presets" title="Manage presets">⋮</button>
           </div>
         </div>
-        <textarea id="system-prompt" rows="3">You are an advanced conversation strategist specializing in transforming challenging interactions into opportunities. Generate sophisticated, contextually-aware responses that demonstrate deep understanding while guiding conversations toward positive outcomes. Your expertise spans executive communication, relationship building, and strategic dialogue management.</textarea>
+        <textarea id="system-prompt" rows="4">You are an advanced conversation strategist powered by Claude AI, specializing in transforming challenging interactions into opportunities. Generate sophisticated, contextually-aware responses that demonstrate deep understanding while guiding conversations toward positive outcomes. Your expertise spans executive communication, relationship building, and strategic dialogue management. Use empathy, active listening, and strategic thinking to create meaningful connections.</textarea>
         <button id="save-prompt">Update Strategy</button>
       </div>
 
@@ -729,11 +729,9 @@
           <div class="model-selector">
             <label for="model-select">AI Engine:</label>
             <select id="model-select">
-              <option value="chatgpt-4o-latest" selected>DialogueGPT-4o (Advanced)</option>
-              <option value="gpt-4o-mini-2024-07-18">DialogueGPT-4o (Rapid)</option>
-              <option value="gpt-4.1-2025-04-14">ConversationAI 4.1</option>
-              <option value="gpt-4.1-mini-2025-04-14">ConversationAI 4.1 (Efficient)</option>
-              <option value="gpt-4.1-nano-2025-04-14">ConversationAI 4.1 (Quick)</option>
+              <option value="claude-3-5-sonnet" selected>Claude 3.5 Sonnet (Advanced)</option>
+              <option value="claude-3-5-haiku">Claude 3.5 Haiku (Rapid)</option>
+              <option value="claude-3-opus">Claude 3 Opus (Premium)</option>
             </select>
           </div>
         </div>
@@ -780,24 +778,6 @@
   </div>
 
 
-  <!-- API Key Dialog -->
-  <div id="api-key-dialog" class="dialog hidden">
-    <div class="dialog-content">
-      <h3>API Key</h3>
-      <p class="info-text">Your API key is stored locally in your browser.</p>
-      
-      <div class="api-key-section">
-        <label for="openai-api-key-input">OpenAI API Key:</label>
-        <input type="password" id="openai-api-key-input" placeholder="sk-..." />
-      </div>
-      
-      <div class="dialog-buttons">
-        <button id="api-key-save">Save</button>
-        <button id="api-key-cancel">Cancel</button>
-      </div>
-      <p id="api-key-status"></p>
-    </div>
-  </div>
 
   <script>
   // Initialize Speech Recognition
@@ -823,11 +803,15 @@
     strategicPresets: {
       'executive-reframer': {
         name: 'Executive Reframer',
-        prompt: 'You are an advanced executive communication strategist with expertise in transforming challenges into strategic opportunities. Generate sophisticated, contextually-aware responses that demonstrate executive presence while building collaborative partnerships. Your responses should reflect deep business acumen and emotional intelligence.'
+        prompt: 'You are an advanced executive communication strategist with expertise in transforming challenges into strategic opportunities. Generate sophisticated, contextually-aware responses that demonstrate executive presence while building collaborative partnerships. Your responses should reflect deep business acumen, emotional intelligence, and strategic thinking. Focus on reframing perspectives constructively.'
       },
       'negotiation': {
         name: 'Negotiation Expert',
-        prompt: 'You are a master negotiation strategist with expertise in high-stakes business conversations. Create tactical responses that redirect objections while building mutual value. Focus on psychological principles, strategic framing, and collaborative problem-solving to achieve win-win outcomes.'
+        prompt: 'You are a master negotiation strategist with expertise in high-stakes business conversations. Create tactical responses that redirect objections while building mutual value. Focus on psychological principles, strategic framing, and collaborative problem-solving to achieve win-win outcomes. Use empathy and understanding to build trust.'
+      },
+      'empathetic-coach': {
+        name: 'Empathetic Coach',
+        prompt: 'You are a skilled conversation coach specializing in empathetic communication. Generate responses that demonstrate deep understanding, validate emotions, and guide conversations toward positive outcomes. Focus on active listening, emotional intelligence, and supportive guidance.'
       }
     }
   };
@@ -861,8 +845,6 @@
     // Load saved state
     loadSavedState();
     
-    // No API key checks needed up front
-    
     // Setup dark mode
     const savedTheme = localStorage.getItem('theme_mode');
     if (savedTheme === 'dark') {
@@ -885,23 +867,6 @@
           console.log("Theme toggle button listener added");
         }
         
-        // Settings button
-        const settingsBtn = document.getElementById('settings-btn');
-        if (settingsBtn) {
-          settingsBtn.addEventListener('click', showApiKeyDialog);
-          console.log("Settings button listener added");
-        }
-        
-        // API key dialog buttons
-        const apiKeySave = document.getElementById('api-key-save');
-        if (apiKeySave) {
-          apiKeySave.addEventListener('click', saveApiKey);
-        }
-        
-        const apiKeyCancel = document.getElementById('api-key-cancel');
-        if (apiKeyCancel) {
-          apiKeyCancel.addEventListener('click', hideApiKeyDialog);
-        }
         
         // Recording toggle
         const toggleBtn = document.getElementById('toggle');
@@ -1013,9 +978,6 @@
       document.getElementById('model-select').value = savedEngine;
     }
     
-    // Load API keys
-    const openaiKey = localStorage.getItem('openai_api_key') || '';
-    const claudeKey = localStorage.getItem('claude_api_key') || '';
     
     // Load conversation history with enhanced metadata
     const savedHistory = localStorage.getItem('dialogue_history');
@@ -1076,7 +1038,7 @@
       deleteBtn.textContent = 'Delete';
       
       // Don't allow deleting the default presets
-      if (['executive-reframer', 'negotiation'].includes(id)) {
+      if (['executive-reframer', 'negotiation', 'empathetic-coach'].includes(id)) {
         deleteBtn.disabled = true;
         deleteBtn.title = 'Cannot delete default presets';
       } else {
@@ -1126,7 +1088,7 @@
       // Filter out default strategies and save custom ones
       const customStrategies = {};
       Object.entries(conversationState.strategicPresets).forEach(([id, strategy]) => {
-        if (!['executive-reframer', 'negotiation'].includes(id)) {
+        if (!['executive-reframer', 'negotiation', 'empathetic-coach'].includes(id)) {
           customStrategies[id] = strategy;
         }
       });
@@ -1196,7 +1158,7 @@
     // Filter out default strategies and save custom ones
     const customStrategies = {};
     Object.entries(conversationState.strategicPresets).forEach(([strategyId, strategy]) => {
-      if (!['executive-reframer', 'negotiation'].includes(strategyId)) {
+      if (!['executive-reframer', 'negotiation', 'empathetic-coach'].includes(strategyId)) {
         customStrategies[strategyId] = strategy;
       }
     });
@@ -1278,47 +1240,6 @@
     }
   }
 
-  // API Key dialog functions
-  function showApiKeyDialog() {
-    const dialog = document.getElementById('api-key-dialog');
-    const openaiInput = document.getElementById('openai-api-key-input');
-    
-    const openaiKey = localStorage.getItem('openai_api_key') || '';
-    
-    openaiInput.value = openaiKey;
-    
-    dialog.classList.remove('hidden');
-    setTimeout(() => openaiInput.focus(), 100);
-  }
-
-  function hideApiKeyDialog() {
-    document.getElementById('api-key-dialog').classList.add('hidden');
-  }
-
-  function saveApiKey() {
-    const openaiInput = document.getElementById('openai-api-key-input');
-    const status = document.getElementById('api-key-status');
-    
-    const openaiKey = openaiInput.value.trim();
-    let isValid = true;
-    
-    // Validate OpenAI key if provided
-    if (openaiKey && !openaiKey.startsWith('sk-')) {
-      status.textContent = 'Invalid OpenAI API key format. It should start with "sk-"';
-      status.style.color = '#dc3545';
-      isValid = false;
-    }
-    
-    if (isValid) {
-      if (openaiKey) {
-        localStorage.setItem('openai_api_key', openaiKey);
-      }
-      
-      status.textContent = 'API key saved successfully!';
-      status.style.color = '#28a745';
-      setTimeout(hideApiKeyDialog, 1000);
-    }
-  }
 
   // Toggle recording function
   function toggleRecording() {
@@ -1480,32 +1401,38 @@
     });
   }
 
-  // Add a response to history
-  function addToHistory(objection, response, model) {
+  // Enhanced conversation history management
+  function addToConversationHistory(userInput, aiResponse, model) {
     const now = new Date();
     const timestamp = now.toLocaleTimeString();
     
-    // Create history item
+    // Create enhanced history item with analysis data
     const historyItem = {
-      objection,
-      response,
+      userInput,
+      aiResponse,
       model,
-      timestamp
+      timestamp,
+      sessionId: Date.now().toString(36) + Math.random().toString(36).substr(2)
     };
     
-    // Add to history
-    appState.responseHistory.push(historyItem);
+    // Add to conversation state
+    conversationState.dialogueHistory.push(historyItem);
     
-    // Limit history to 50 items
-    if (appState.responseHistory.length > 50) {
-      appState.responseHistory.shift();
+    // Limit history to 50 items for performance
+    if (conversationState.dialogueHistory.length > 50) {
+      conversationState.dialogueHistory.shift();
     }
     
+    // Update metrics
+    conversationState.conversationMetrics.totalInteractions++;
+    
     // Save to localStorage
-    localStorage.setItem('response_history', JSON.stringify(appState.responseHistory));
+    localStorage.setItem('dialogue_history', JSON.stringify(conversationState.dialogueHistory));
     
     // Update UI
-    renderHistoryList();
+    renderConversationHistory();
+    
+    console.log('Added to conversation history:', historyItem);
   }
 
   // Clear response history
@@ -1589,10 +1516,7 @@
       }
       
       // Show appropriate error message
-      if (error.message.includes('API key')) {
-        replyElement.textContent = '🔑 API key missing or invalid. Click ⚙️ to set your API key.';
-        setTimeout(showApiKeyDialog, 1000);
-      } else if (error.message.includes('rate') || error.message.includes('limit')) {
+      if (error.message.includes('rate') || error.message.includes('limit')) {
         replyElement.textContent = '⏳ Rate limit exceeded. Please wait a moment and try again.';
       } else if (error.message.includes('model')) {
         replyElement.textContent = `⚠️ AI Engine not available. The ${conversationState.selectedEngine} engine might not be accessible.`;
@@ -1602,35 +1526,21 @@
     }
   }
 
-  // Function to generate strategic AI response
+  // Function to generate strategic AI response using Claude via serverless function
   async function generateAIResponse(text, model, conversationStrategy, replyElement) {
     try {
-      // Get API key
-      const apiKey = localStorage.getItem('openai_api_key');
+      console.log('Calling Claude API via serverless function...');
       
-      if (!apiKey) {
-        throw new Error('DialogueCraft API authentication missing');
-      }
-      
-      // Make API request
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      // Make API request to Netlify function
+      const response = await fetch('/api/conversation-processor', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          model: model,
-          messages: [
-            {
-              role: 'system',
-              content: conversationStrategy
-            },
-            {
-              role: 'user',
-              content: `Conversation context: "${text}". Generate a strategic, thoughtful response that demonstrates understanding and guides toward positive outcomes. Be professional, insightful, and conversational.`
-            }
-          ]
+          conversationInput: text,
+          conversationStrategy: conversationStrategy,
+          selectedModel: model
         })
       });
       
@@ -1639,14 +1549,8 @@
         let errorMessage = response.statusText;
         try {
           const errorData = await response.json();
-          console.error("OpenAI API error:", errorData);
-          if (errorData.error && errorData.error.message) {
-            errorMessage = errorData.error.message;
-          } else if (errorData.error) {
-            errorMessage = JSON.stringify(errorData.error);
-          } else if (errorData.message) {
-            errorMessage = errorData.message;
-          }
+          console.error("Claude API error:", errorData);
+          errorMessage = errorData.error || errorData.details || errorMessage;
         } catch (e) {
           console.error("Failed to parse error response:", e);
         }
@@ -1655,21 +1559,33 @@
       
       // Process successful response
       const data = await response.json();
-      console.log("DialogueCraft AI Engine response:", data);
+      console.log("Claude AI Engine response:", data);
       
-      // AI Engine response format
-      const strategicReply = data.choices[0]?.message?.content || "No response from DialogueCraft AI Engine";
+      if (!data.success) {
+        throw new Error(data.error || 'Unknown error occurred');
+      }
+      
+      // Extract the strategic reply from the subagent response
+      const strategicReply = data.response || data.fallbackResponse || "I understand your perspective. Let me provide a thoughtful response.";
       
       // Remove loading indicator and show strategic reply
       replyElement.classList.remove('pulsing');
       replyElement.textContent = strategicReply;
       
+      // Log the comprehensive analysis for debugging
+      if (data.analysis) {
+        console.log('Conversation Analysis:', data.analysis);
+      }
+      if (data.quality) {
+        console.log('Response Quality Assessment:', data.quality);
+      }
+      
       // Return the strategic reply to be added to history
       return strategicReply;
     } catch (error) {
-      console.error("DialogueCraft AI Engine error:", error);
+      console.error("Claude AI Engine error:", error);
       replyElement.classList.remove('pulsing');
-      replyElement.textContent = `❌ DialogueCraft AI Engine Error: ${error.message}`;
+      replyElement.textContent = `❌ Claude AI Engine Error: ${error.message}`;
       throw error;
     }
   }
@@ -1685,7 +1601,7 @@
   </script>
 
   <footer class="footer">
-    <p>Powered by DialogueCraft Advanced AI • <a href="https://nikhilmahesh.com/" target="_blank" rel="noopener">Visit nikhilmahesh.com</a></p>
+    <p>Powered by Claude AI & Subagent Architecture • <a href="https://nikhilmahesh.com/" target="_blank" rel="noopener">Visit nikhilmahesh.com</a></p>
   </footer>
 
   <!-- Include utils.js for UIStateManager and other utilities -->
