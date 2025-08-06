@@ -64,8 +64,8 @@ DialogueCraft employs a sophisticated multi-agent architecture:
 
 1. **Clone and Setup**
    ```bash
-   git clone https://github.com/yourusername/ConvoAssistant.git
-   cd ConvoAssistant
+   git clone https://github.com/N-Mahesh/DialogueCraft.git
+   cd DialogueCraft
    npm install
    ```
 
@@ -314,15 +314,15 @@ We welcome contributions! Here's how to get started:
 
 1. **Fork & Clone**
    ```bash
-   git fork https://github.com/yourusername/ConvoAssistant.git
-   git clone https://github.com/yourusername/ConvoAssistant.git
-   cd ConvoAssistant
+   git fork https://github.com/N-Mahesh/DialogueCraft.git
+   git clone https://github.com/N-Mahesh/DialogueCraft.git
+   cd DialogueCraft
    npm install
    ```
 
 2. **Create Feature Branch**
    ```bash
-   git checkout -b feature/your-feature-name
+   git switch -c feature/your-feature-name
    ```
 
 3. **Make Changes**
@@ -349,7 +349,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ```
 MIT License
 
-Copyright (c) 2024 Nikhil Mahesh
+Copyright (c) 2025 Nikhil Mahesh
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -368,7 +368,6 @@ copies or substantial portions of the Software.
 
 - **📧 Email**: [Contact via website](https://nikhilmahesh.com/)
 - **🐛 Issues**: [GitHub Issues](https://github.com/yourusername/ConvoAssistant/issues)
-- **💬 Discussions**: [GitHub Discussions](https://github.com/yourusername/ConvoAssistant/discussions)
 
 ### Roadmap
 
@@ -386,8 +385,4 @@ copies or substantial portions of the Software.
 **Built with ❤️ by [Nikhil Mahesh](https://nikhilmahesh.com/)**
 
 *Powered by Claude AI & Intelligent Subagent Architecture*
-
-[![GitHub stars](https://img.shields.io/github/stars/yourusername/ConvoAssistant?style=social)](https://github.com/yourusername/ConvoAssistant/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/yourusername/ConvoAssistant?style=social)](https://github.com/yourusername/ConvoAssistant/network/members)
-
 </div>
