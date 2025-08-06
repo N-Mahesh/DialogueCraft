@@ -1,30 +1,62 @@
-/* Additional styles for the Live Objection Handler */
+/* Glassmorphism Enhanced Styles */
 
-/* Variables for consistent theming */
+/* Import the glassmorphism variables from main file */
 :root {
-  --primary-color: #4a6fa5;
-  --primary-hover: #3a5a8f;
-  --secondary-color: #f8f9fa;
-  --text-color: #333;
-  --success-color: #28a745;
-  --warning-color: #ffc107;
-  --danger-color: #dc3545;
+  /* Inherit glassmorphism variables from index.html */
+  --glass-white: rgba(255, 255, 255, 0.25);
+  --glass-surface: rgba(255, 255, 255, 0.4);
+  --glass-hover: rgba(255, 255, 255, 0.5);
+  --glass-border: rgba(255, 255, 255, 0.45);
+  --glass-shadow: rgba(31, 38, 135, 0.15);
+  --blur-amount: 20px;
+  --transition-speed: 0.3s;
+  --transition-function: cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Status colors with glass effect */
+  --success-glass: rgba(16, 185, 129, 0.2);
+  --warning-glass: rgba(245, 158, 11, 0.2);
+  --danger-glass: rgba(239, 68, 68, 0.2);
 }
 
 #status-dot {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   display: inline-block;
-  background: white; /* default - white for contrast inside button */
+  background: rgba(255, 255, 255, 0.6);
   margin-right: 8px;
   position: relative;
   top: -1px;
-  transition: background-color 0.3s ease;
+  transition: all var(--transition-speed) var(--transition-function);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 }
-#status-dot.listening  { background: var(--warning-color); }
-#status-dot.processing { background: var(--primary-color); }
-#status-dot.error      { background: var(--danger-color); }
+
+#status-dot.listening {
+  background: var(--warning-glass);
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
+  animation: pulse 1.5s infinite;
+}
+
+#status-dot.processing {
+  background: var(--glass-surface);
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+  animation: rotate 1s linear infinite;
+}
+
+#status-dot.error {
+  background: var(--danger-glass);
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.8; }
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
 
 body {
   font-family: Arial, sans-serif;
@@ -64,12 +96,18 @@ button.active {
 }
 
 pre {
-  background: var(--secondary-color);
-  padding: 15px;
-  border-radius: 5px;
+  background: var(--glass-surface);
+  backdrop-filter: blur(var(--blur-amount));
+  -webkit-backdrop-filter: blur(var(--blur-amount));
+  padding: 1.25rem;
+  border-radius: 12px;
   white-space: pre-wrap;
-  margin-top: 15px;
-  border: 1px solid #ddd;
+  margin-top: 1rem;
+  border: 1px solid var(--glass-border);
+  box-shadow: 
+    0 8px 32px var(--glass-shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all var(--transition-speed) var(--transition-function);
 }
 
 #lastObjection {
@@ -81,24 +119,43 @@ pre {
   font-weight: bold;
 }
 
-/* Simple animation for the reply */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+/* Glass fade-in animation */
+@keyframes glassFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+    filter: blur(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
 }
 
 #reply:not(:empty) {
-  animation: fadeIn 0.5s ease-in-out;
+  animation: glassFadeIn 0.5s var(--transition-function);
 }
 
-/* Styles for visualizer bars */
+/* Glass visualizer bars */
 .visualizer-bar {
-  width: 3px;
+  width: 4px;
   display: inline-block;
-  margin: 0 1px;
+  margin: 0 2px;
   height: 5px;
-  background-color: var(--primary-color);
-  transition: height 0.1s ease-out;
+  background: linear-gradient(to top,
+    rgba(99, 102, 241, 0.8),
+    rgba(99, 102, 241, 0.2));
+  border-radius: 2px;
+  transition: height 0.1s var(--transition-function);
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
+}
+
+.dark-mode .visualizer-bar {
+  background: linear-gradient(to top,
+    rgba(129, 140, 248, 1),
+    rgba(129, 140, 248, 0.3));
+  box-shadow: 0 0 15px rgba(129, 140, 248, 0.5);
 }
 
 /* Responsive adjustments */

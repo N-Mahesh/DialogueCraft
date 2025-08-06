@@ -4,116 +4,151 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-DialogueCraft is a conversation intelligence web application that provides real-time AI coaching and response generation. It uses speech recognition to capture live conversations and generates strategic responses using OpenAI's API to help users improve their conversational skills.
+DialogueCraft is an advanced conversation intelligence web application that provides real-time AI coaching and strategic response generation. It uses speech recognition to capture live conversations and generates intelligent responses using Anthropic's Claude API via a serverless architecture with specialized subagents.
 
 ## Architecture
 
 ### Core Components
 
-- **index.html**: Main application interface with embedded CSS and JavaScript
-  - Contains all UI styling and the primary application logic
+- **index.html**: Main application interface with comprehensive embedded CSS and JavaScript
+  - Contains all UI styling and primary application logic (1600+ lines)
   - Implements speech recognition using Web Speech API
-  - Manages conversation strategies and AI model selection
-  - Handles theme switching (light/dark mode)
+  - Manages conversation strategies and Claude AI model selection
+  - Handles theme switching (light/dark mode) with CSS custom properties
+  - Includes complete conversation management system with preset handling
 
-- **app.js**: Extended functionality and OpenAI integration
-  - Initializes OpenAI client for browser usage
-  - Provides API key management and validation
-  - Implements keyboard shortcuts (Spacebar, Alt+H, Alt+K)
-  - Adds conversation history tracking
+- **app.js**: Extended functionality and keyboard shortcuts
+  - Provides keyboard shortcuts (Spacebar for recording toggle, Alt+H for history)
+  - Adds conversation history display functionality
+  - No longer handles API keys (moved to serverless functions)
 
-- **utils.js**: Utility classes and helper functions
-  - `AudioProcessor`: Handles audio visualization, processing, and WAV conversion
-  - `UIStateManager`: Manages application states (ready, listening, processing, error)
-  - `APIKeyManager`: Handles API key storage and validation
-  - `ThemeManager`: Manages light/dark theme switching
-  - `ConversationAnalyzer`: Analyzes conversation sentiment and objection levels
-  - `ResponseQualityTracker`: Tracks response quality metrics
+- **utils.js**: Comprehensive utility classes and helper functions
+  - `AudioProcessor`: Advanced audio visualization, processing, and WAV conversion
+  - `UIStateManager`: Application state management (ready, listening, processing, error)
+  - `APIKeyManager`: Legacy API key management (not used in current Claude implementation)
+  - `ThemeManager`: Theme switching functionality
+  - `ConversationAnalyzer`: Advanced conversation analysis with sentiment detection
+  - `ResponseQualityTracker`: Response quality metrics and assessment
 
-- **styles.css**: Additional styling for UI components
-  - Defines CSS variables for theming
-  - Styles for status indicators and visualizer bars
+- **styles.css**: Additional UI component styling
+  - CSS variables for consistent theming
+  - Status indicators and audio visualizer styles
   - Responsive design adjustments
+
+### Serverless Architecture
+
+- **netlify/functions/conversation-processor.js**: Main AI processing endpoint
+  - Implements sophisticated subagent system with Claude AI
+  - `ConversationAnalyzerAgent`: Analyzes sentiment, intent, and emotional tone
+  - `ResponseGeneratorAgent`: Creates strategic conversation responses
+  - `QualityAssessorAgent`: Assesses response quality and provides improvements
+  - `ContextManagerAgent`: Manages conversation history and context
+  - Uses Claude 3.5 Sonnet for analysis/generation, Claude 3.5 Haiku for quality assessment
 
 ### Key Features
 
-1. **Real-time Speech Recognition**: Uses browser's Web Speech API
-2. **AI Response Generation**: Integrates with OpenAI API (GPT-4o models)
-3. **Conversation Strategies**: Predefined and custom conversation presets
+1. **Real-time Speech Recognition**: Browser Web Speech API integration
+2. **Claude AI Integration**: Advanced AI via Anthropic Claude API with subagent architecture
+3. **Conversation Strategies**: Predefined presets (Executive Reframer, Negotiation Expert, Empathetic Coach)
 4. **Audio Visualization**: Real-time audio level visualization during recording
-5. **Conversation History**: Persistent storage of conversation exchanges
-6. **Theme Support**: Light and dark mode with CSS custom properties
-7. **API Key Management**: Secure local storage of API credentials
+5. **Persistent History**: Browser localStorage for conversation exchanges
+6. **Theme Support**: Light/dark mode with CSS custom properties
+7. **Serverless Processing**: Secure API key management via Netlify functions
 
 ### Data Flow
 
 1. Speech input captured via Web Speech API
 2. Transcription displayed in real-time
-3. AI generates strategic response based on selected conversation strategy
-4. Response displayed with model information
-5. Conversation history saved to localStorage
-6. Audio visualization shows recording activity
+3. Input sent to `/api/conversation-processor` Netlify function
+4. Subagent system processes input through multiple Claude API calls:
+   - Analysis agent evaluates sentiment, intent, emotional tone
+   - Generator agent creates strategic response based on conversation strategy
+   - Quality assessor evaluates and suggests improvements
+   - Context manager tracks conversation history
+5. Comprehensive response returned with analysis, quality metrics, and metadata
+6. Response displayed with quality indicators
+7. Conversation saved to localStorage
 
 ### State Management
 
-The application uses `UIStateManager` to track four states:
+Application uses `UIStateManager` with four states:
 - `READY`: Application ready for input
 - `LISTENING`: Actively recording speech
-- `PROCESSING`: Generating AI response
+- `PROCESSING`: Generating AI response via serverless function
 - `ERROR`: Error state with user feedback
 
 ### Storage
 
-All data is stored in browser localStorage:
-- `openai_api_key`: OpenAI API key
+Browser localStorage stores:
 - `active_strategy`: Current conversation strategy prompt
-- `selected_engine`: Selected AI model
-- `dialogue_history`: Conversation history array
+- `selected_engine`: Selected Claude model (claude-3-5-sonnet, claude-3-5-haiku, claude-3-opus)
+- `dialogue_history`: Conversation history array with metadata
 - `strategic_presets`: Custom conversation strategy presets
-- `theme_mode`: Current theme preference (light/dark)
+- `theme_mode`: Theme preference (light/dark)
 
 ## Development Commands
 
-This is a client-side web application with no build process. Open `index.html` directly in a web browser or serve via a local HTTP server.
-
-### Running the Application
+### Local Development
 
 ```bash
-# Option 1: Open directly in browser
-open index.html
+# Install dependencies
+npm install
 
-# Option 2: Serve with Python (recommended for local development)
-python -m http.server 8000
+# Start Netlify dev server (includes functions)
+npm run dev
 
-# Option 3: Serve with Node.js
-npx serve .
+# Access application at http://localhost:8888
 ```
 
-### Browser Requirements
+### Production Deployment
 
-- Modern browser with Web Speech API support (Chrome, Edge, Safari)
-- Microphone permissions required for speech recognition
-- Internet connection required for OpenAI API calls
+```bash
+# Deploy to Netlify
+npm run deploy
+```
+
+### Environment Setup
+
+Create `.env` file with:
+```
+ANTHROPIC_API_KEY=your_claude_api_key_here
+```
 
 ## Configuration
 
-### API Keys
-Users must provide their own OpenAI API key through the settings dialog (⚙️ button). The key is validated (must start with "sk-") and stored locally.
+### Claude Models
+Supported Claude models via serverless functions:
+- `claude-3-5-sonnet` (Advanced): Primary analysis and response generation
+- `claude-3-5-haiku` (Rapid): Quality assessment and quick processing
+- `claude-3-opus` (Premium): Highest quality analysis
 
 ### Conversation Strategies
-Default strategies include:
-- Executive Reframer: For business communication
-- Negotiation Expert: For negotiation scenarios
-- Custom strategies can be created and saved
+Built-in strategies with specialized prompts:
+- Executive Reframer: Business communication and strategic thinking
+- Negotiation Expert: Deal-making and conflict resolution
+- Empathetic Coach: Personal conversations and emotional intelligence
 
-### Supported Models
-- DialogueGPT-4o (Advanced) - `chatgpt-4o-latest`
-- DialogueGPT-4o (Rapid) - `gpt-4o-mini-2024-07-18`
-- ConversationAI 4.1 variants
+### API Configuration
+The serverless function endpoint `/api/conversation-processor` expects:
+```javascript
+{
+  "conversationInput": "User's speech input",
+  "conversationStrategy": "Strategy prompt text",
+  "selectedModel": "claude-3-5-sonnet" // optional
+}
+```
+
+Returns comprehensive analysis with:
+- Strategic response text
+- Sentiment and intent analysis
+- Quality assessment scores
+- Processing metadata
 
 ## File Structure Notes
 
-- All functionality is contained in the main files listed above
-- No external dependencies beyond browser APIs and OpenAI
-- Self-contained styling with CSS custom properties for theming
-- Modular utility classes in utils.js for maintainability
+- Main application logic concentrated in `index.html` (self-contained)
+- Serverless functions handle all Claude AI processing securely
+- No client-side API key management (security enhancement)
+- Modular utility classes provide reusable functionality
+- CSS custom properties enable consistent theming across light/dark modes
+- Audio processing includes WAV conversion and visualization capabilities

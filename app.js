@@ -56,9 +56,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const historyHTML = conversationHistory
       .map((item, i) => `
         <div style="margin-bottom: 15px; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
-          <div style="font-weight: bold; color: #2D4059;">🎙️ Input:</div>
+          <div style="font-weight: bold; color: #2D4059;">Input:</div>
           <div style="margin: 5px 0;">"${item.input}"</div>
-          <div style="font-weight: bold; color: #27AE60;">🎯 Response:</div>
+          <div style="font-weight: bold; color: #27AE60;">Response:</div>
           <div style="margin: 5px 0;">"${item.response}"</div>
           <div style="font-size: 12px; color: #666; margin-top: 5px;">${new Date(item.timestamp).toLocaleString()}</div>
         </div>
@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
   toggleButton.addEventListener('click', () => {
     if (on) {
       toggleButton.classList.add('active');
-      document.title = '🎤 Listening - Live Objection Handler';
+      document.title = 'Listening - Live Objection Handler';
     } else {
       toggleButton.classList.remove('active');
       document.title = 'Live Objection Handler';
